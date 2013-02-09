@@ -32,6 +32,7 @@ USAGE:
 
 
 EXAMPLE:
+
     var CustomEvent = PacaClass('CustomEvent', PCEvent); (function() {var public = CustomEvent.prototype;
 
         public.name = "customevent";
