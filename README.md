@@ -8,24 +8,20 @@ ____________________
 ABOUT:
   AS3 like event handling.
 
-LIMITATIONS:
-  - On purpose, one event can have only one name associated.
-  - There is no priority (yet). New event bindings get execute last.
-
 USAGE:
+
+  - see jsdoc for updated documentation
   - new PCEventDispatcher(); // Creates and event dispatcher instance
-  - var CustomEvent = PacaClass('CustomEvent', PCEvent); // Extends class PCEvent to create a custom event.
+  - window.CustomEvent = PacaClass('CustomEvent', PCEvent); // Extends class PCEvent to create a custom event.
 
  PCEventDispatcher methods:
-    - bind(eventClass, handlerFunction, scope, [lowPriority:boolean])
-        * by default new event listeners get called first in order to have event.preventDefault() useful.
-    - unbind(eventClass, [handlerFunction], [scope])
-        * you can pass undefined or omit handlerFunction, scope or both
-        * it removes all events that match the given parameters.
-    - trigger(eventInstance)
+
+    - see jsdoc
 
  PCEvent methos:
+
     - preventDefault()
+
         * stops event queue execution after this handlerFunction finishes.
 
   Define events like you would do in acstionscript. See example.
