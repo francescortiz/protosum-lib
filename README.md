@@ -20,7 +20,7 @@ USAGE:
 
  PCEvent methos:
 
-    - preventDefault()
+    - stopPropagation()
 
         * stops event queue execution after this handlerFunction finishes.
 
@@ -29,21 +29,23 @@ USAGE:
 
 EXAMPLE:
 
-    var CustomEvent = PacaClass('CustomEvent', PCEvent); (function() {var public = CustomEvent.prototype;
+    var CustomEvent = PacaClass('CustomEvent', PCEvent); (function() {
+        var proto = CustomEvent.prototype;
 
-        public.name = "customevent";
+        proto.name = "customevent";
 
-        public.constructor = function(data) {
+        proto.constructor = function(data) {
             this.data = data;
         }
 
     })();
 
-    var C = PacaClass(A, B); (function() {var public = C.prototype;
+    var C = PacaClass(A, B); (function() {
+        var proto = C.prototype;
 
-        public.someVar = "somveValue";
+        proto.someVar = "somveValue";
 
-        public.customeEventHandler = function(event) {
+        proto.customeEventHandler = function(event) {
             log("C.customEvent", "event.data = ", event.data, "this.someVar = ",this.someVar);
         }
 
