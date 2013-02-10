@@ -19,20 +19,30 @@
 
 /**
  * PacaClass base event Event
- * @class
- * @export
+ * @type PCEvent
  */
 window.PCEvent = PacaClass('PCEvent');  (function() {
+    /**
+     * PCEvent prototype
+     * @type Object
+     */
     var proto = PCEvent.prototype;
-
-    /** @lends PCEvent */
 
     /**
      * if set to true, no more events will be executed after this one.
      * @type Boolean
      */
-    proto.default_prevented = false;
-    proto.name = undefined;
+    proto.propagation_stopped = false;
+    /**
+     * Name of the event
+     * @type String
+     */
+    proto.name;
+    /**
+     * Holds the dispatching object. Set automatically by the eventdisepatcher.
+     * @type PCEventDispatcher
+     */
+    proto.dispatcher;
 
     /**
      * Creates an event
@@ -46,16 +56,16 @@ window.PCEvent = PacaClass('PCEvent');  (function() {
     /**
      * If called, no more events are executed after this event
      */
-    proto.preventDefault = function() {
-        this.default_prevented = true;
+    proto.stopPropagation = function() {
+        this.propagation_stopped = true;
     }
 
     /**
      * Checks where we prevented default
      * @return Boolean
      */
-    proto.isDefaultPrevented = function() {
-        return this.default_prevented;
+    proto.isPropagationStopped = function() {
+        return this.propagation_stopped;
     }
 
 })();
@@ -63,8 +73,7 @@ window.PCEvent = PacaClass('PCEvent');  (function() {
 
 /**
  * EventDispatcher
- * @class
- * @export
+ * @type PCEventDispatcher
  */
 window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
     var proto = PCEventDispatcher.prototype;
@@ -73,13 +82,13 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
      * Contains the list of all registered events in the application.
      * @type {Object}
      */
-    proto.registered_events = {};
+    proto.registered_events;
 
     /**
      * @constructs PCEventDispatcher
      */
     proto.constructor = function() {
-
+        this.registered_events = {};
     }
 
     /**
@@ -139,6 +148,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
         if (!event || !event.isInstance || !event.isInstance(PCEvent)) {
             throw new Error("PCEventDispatcher.trigger: event is not PCEvent instance. PCEvent = " + event);
         }
+        event.dispatcher = this;
         var handler_list = this.registered_events[event.name];
         if (handler_list) {
             var len = handler_list.length;
@@ -147,7 +157,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
                 var func = handler_data[0];
                 var scope = handler_data[1];
                 func.call(scope, event);
-                if (event.default_prevented) {
+                if (event.propagation_stopped) {
                     return;
                 }
             }
@@ -201,8 +211,8 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
         if (!scope && !handler) {
             this.registered_events = {};
         } else {
-            for (var event_name in this.registered_events) {
-                var handler_list = this.registered_events[event_name];
+            for (var name in this.registered_events) {
+                var handler_list = this.registered_events[name];
                 var len = handler_list.length;
                 var nhd = [];
                 for (var i = 0; i < len; i++) {
@@ -218,7 +228,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
                     }
                     nhd.push(handler_data);
                 }
-                this.registered_events[event_name] = nhd;
+                this.registered_events[name] = nhd;
             }
         }
     }
