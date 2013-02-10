@@ -324,6 +324,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
      * Removes all event listeners.
      * @param [scope]    Object    if specified, remove only events associated with this scope
      * @param [handler]  Function  if specified, remove only events associated with this handler function
+     * @param [use_capture] Boolean  Whether we want to clear native events created with useCapture
      */
     proto.clearEventListeners = function(scope, handler, use_capture) {
         if (!scope && !handler) {
