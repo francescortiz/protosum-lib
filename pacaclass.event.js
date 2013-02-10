@@ -1,8 +1,29 @@
+/***************
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ ****************/
+
 /**
  * PacaClass base event Event
  * @class
+ * @export
  */
-window.PCEvent = PacaClass('PCEvent');  (function() {var public = PCEvent.prototype;
+window.PCEvent = PacaClass('PCEvent');  (function() {
+    var proto = PCEvent.prototype;
 
     /** @lends PCEvent */
 
@@ -10,21 +31,22 @@ window.PCEvent = PacaClass('PCEvent');  (function() {var public = PCEvent.protot
      * if set to true, no more events will be executed after this one.
      * @type Boolean
      */
-    public.default_prevented = false;
+    proto.default_prevented = false;
+    proto.name = undefined;
 
     /**
      * Creates an event
      * @param name  String  name of the event to create.
      * @constructor
      */
-    public.constructor = function(name) {
+    proto.constructor = function(name) {
         this.name = name;
     }
 
     /**
      * If called, no more events are executed after this event
      */
-    public.preventDefault = function() {
+    proto.preventDefault = function() {
         this.default_prevented = true;
     }
 
@@ -32,7 +54,7 @@ window.PCEvent = PacaClass('PCEvent');  (function() {var public = PCEvent.protot
      * Checks where we prevented default
      * @return Boolean
      */
-    public.isDefaultPrevented = function() {
+    proto.isDefaultPrevented = function() {
         return this.default_prevented;
     }
 
@@ -42,19 +64,21 @@ window.PCEvent = PacaClass('PCEvent');  (function() {var public = PCEvent.protot
 /**
  * EventDispatcher
  * @class
+ * @export
  */
-window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {var public = PCEventDispatcher.prototype;
+window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
+    var proto = PCEventDispatcher.prototype;
 
     /**
      * Contains the list of all registered events in the application.
      * @type {Object}
      */
-    public.registered_events = {};
+    proto.registered_events = {};
 
     /**
      * @constructs PCEventDispatcher
      */
-    public.constructor = function() {
+    proto.constructor = function() {
 
     }
 
@@ -65,7 +89,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {var pub
      * @param scope           Object    object to set the scope of the event to
      * @param [low_priority]  Boolean   if true, the event will be pushed to the end of the event queue
      */
-    public.addEventListener = function(name, handler, scope, low_priority) {
+    proto.addEventListener = function(name, handler, scope, low_priority) {
         if (!handler) {
             throw new Error("PCEventDispatcher.addEventListener: Undefined handler provided for " + name + " on " + scope.__class__.__name__);
         }
@@ -111,7 +135,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {var pub
      * Triggers an event
      * @param event  PCEvent  event to dispatch
      */
-    public.dispatchEvent = function(event) {
+    proto.dispatchEvent = function(event) {
         if (!event || !event.isInstance || !event.isInstance(PCEvent)) {
             throw new Error("PCEventDispatcher.trigger: event is not PCEvent instance. PCEvent = " + event);
         }
@@ -136,7 +160,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {var pub
      * @param [handler]  Function  function associated to the event. If omited al handlers are removed
      * @param [scope]    Object    object to remove event from. If omited all objects are removed.
      */
-    public.removeEventListener = function(name, handler, scope) {
+    proto.removeEventListener = function(name, handler, scope) {
         if (!handler && !scope) {
             this.registered_events[name] = {};
         }
@@ -173,7 +197,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {var pub
      * @param [scope]    Object    if specified, remove only events associated with this scope
      * @param [handler]  Function  if specified, remove only events associated with this handler function
      */
-    public.clearEventListeners = function(scope, handler) {
+    proto.clearEventListeners = function(scope, handler) {
         if (!scope && !handler) {
             this.registered_events = {};
         } else {
@@ -200,3 +224,4 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {var pub
     }
 
 })();
+
