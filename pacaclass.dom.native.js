@@ -152,7 +152,11 @@ window.NativePCEvent = PacaClass('NativePCEvent', PCEvent); (function(){
 window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisplayObject, PCEventDispatcher); (function(){
     var proto = NativePCEventDispatcher.prototype;
 
-    NativePCEventDispatcher.NATIVE_EVENTS = ",click,dblclick,mousedown,mousemove,mouseover,mouseup,keydown,keypress,keyup,abort,error,load,resize,scroll,unload,blur,change,focus,reset,select,submit,";
+    var NATIVE_EVENTS = [
+        "click","dblclick","mousedown","mousemove","mouseover","mouseup","keydown","keypress","keyup","abort","error",
+        "load","resize","scroll","unload","blur","change","focus","reset","select","submit"
+    ];
+    var NATIVE_EVENTS_LENGTH = NATIVE_EVENTS.length;
 
     /**
      *
@@ -180,9 +184,13 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
     }
 
     NativePCEventDispatcher.isNative = function(name) {
-        if (NativePCEventDispatcher.NATIVE_EVENTS.indexOf(',' + name + ',') != -1) {
-            return true;
+        var i = 0;
+        for (;i < NATIVE_EVENTS_LENGTH; i++) {
+            if (NATIVE_EVENTS[i] === name) {
+                return true;
+            }
         }
+        return false;
         return false;
     }
 
