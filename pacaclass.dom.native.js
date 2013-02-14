@@ -191,7 +191,6 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
             }
         }
         return false;
-        return false;
     }
 
     /**
