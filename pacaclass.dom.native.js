@@ -145,6 +145,10 @@ window.NativePCEvent = PacaClass('NativePCEvent', PCEvent); (function(){
 })();
 
 /**
+ * Creates a NativePCEventDispatcher. It is a special event dispatcher that detects browser events and binds
+ * to them. Think of PCEventDispatcher a an event dispatcher for application workflow, and of NativePCEventDispatcher
+ * as an event dispatcher for dom integration.
+ *
  * @extends NativeDisplayObject
  * @extends NativePCEventDispatcher
  * @type NativePCEventDispatcher
@@ -153,8 +157,17 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
     var proto = NativePCEventDispatcher.prototype;
 
     var NATIVE_EVENTS = [
-        "click","dblclick","mousedown","mousemove","mouseover","mouseup","keydown","keypress","keyup","abort","error",
-        "load","resize","scroll","unload","blur","change","focus","reset","select","submit"
+        // Base events
+        "click","dblclick","mousedown","mousemove","mouseover","mouseup","mouseout","keydown","keypress","keyup",
+        "abort","error","load","resize","scroll","unload","blur","change","focus","reset","select","submit","pagehide",
+        "pageshow",
+        // Clipboard events
+        "copy","cut","paste","selection",
+        // Drag events
+        "drag","drop",
+        // Mobile events
+        "touchstart","touchcancel","touchend","touchleave","touchmove","orientationchange",
+        "gesturestart","gesturechange","gestureend"
     ];
     var NATIVE_EVENTS_LENGTH = NATIVE_EVENTS.length;
 
@@ -183,7 +196,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
         }
     }
 
-    NativePCEventDispatcher.isNative = function(name) {
+    var isNative = function(name) {
         var i = 0;
         for (;i < NATIVE_EVENTS_LENGTH; i++) {
             if (NATIVE_EVENTS[i] === name) {
@@ -208,7 +221,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
         if (!scope) {
             throw new Error("PCEventDispatcher.addEventListener: Undefined scope provided for " + name + ".");
         }
-        if (NativePCEventDispatcher.isNative(name)) {
+        if (isNative(name)) {
             // TODO: Should we check if the event is already registered?
             // TODO: Should we make a setter for NativeDisplayObject called setNode that we can override to detect the function to use instead of doing it realtime?
             var node = this.node;
@@ -356,7 +369,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
                 }
                 this.registered_events[name] = nhd;
 
-                if (!nhd.length && NativePCEventDispatcher.isNative(name)) {
+                if (!nhd.length && isNative(name)) {
                     // TODO: Should we check if the event is already registered?
                     // TODO: Should we make a setter for NativeDisplayObject called setNode that we can override to detect the function to use instead of doing it realtime?
                     var node = this.node;
