@@ -134,6 +134,27 @@ window.NativePCEvent = PacaClass('NativePCEvent', PCEvent); (function(){
     proto.native_event;
 
     /**
+     * if set to true, parent dom objects won't receive the click event.
+     * @type Boolean
+     */
+    proto.propagation_stopped = false;
+
+    /**
+     * If called, parent dom objects won't receive the click event
+     */
+    proto.stopPropagation = function() {
+        this.propagation_stopped = true;
+    }
+
+    /**
+     * equivalent to call both preventDefault and stopPropagation.
+     */
+    proto.cancel = function() {
+        this.default_prevented = true;
+        this.propagation_stopped = true;
+    }
+
+    /**
      *
      * @param native_event {Event}
      */
@@ -190,9 +211,12 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
         }
         var ne = new NativePCEvent(native_event)
         this.dispatchEvent(ne);
+        if (ne.default_prevented) {
+            native_event.preventDefault();
+            native_event.cancelBubble = true;
+        }
         if (ne.propagation_stopped) {
             native_event.stopPropagation();
-            native_event.cancelBubble = true;
         }
     }
 
@@ -282,7 +306,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
                 var func = handler_data[0];
                 var scope = handler_data[1];
                 func.call(scope, event);
-                if (event.propagation_stopped) {
+                if (event.default_prevented) {
                     return;
                 }
             }
@@ -326,8 +350,8 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
 
         }
 
-        if (!nhd.length && NativePCEventDispatcher.isNative(name)) {
-            // TODO: Should we check if the event is already registered?
+        if (!nhd.length && isNative(name)) {
+            // TODO: Should we check if the event is already registered to boost performance?
             // TODO: Should we make a setter for NativeDisplayObject called setNode that we can override to detect the function to use instead of doing it realtime?
             var node = this.node;
             if (node.removeEventListener) { // W3C DOM
@@ -370,7 +394,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
                 this.registered_events[name] = nhd;
 
                 if (!nhd.length && isNative(name)) {
-                    // TODO: Should we check if the event is already registered?
+                    // TODO: Should we check if the event is already registered to boost performance?
                     // TODO: Should we make a setter for NativeDisplayObject called setNode that we can override to detect the function to use instead of doing it realtime?
                     var node = this.node;
                     if (node.removeEventListener) { // W3C DOM

@@ -32,7 +32,7 @@ window.PCEvent = PacaClass('PCEvent');  (function() {
      * if set to true, no more events will be executed after this one.
      * @type Boolean
      */
-    proto.propagation_stopped = false;
+    proto.default_prevented = false;
     /**
      * Name of the event
      * @type String
@@ -56,8 +56,15 @@ window.PCEvent = PacaClass('PCEvent');  (function() {
     /**
      * If called, no more events are executed after this event
      */
-    proto.stopPropagation = function() {
-        this.propagation_stopped = true;
+    proto.preventDefault = function() {
+        this.default_prevented = true;
+    }
+
+    /**
+     * in PCEvent it is equivalent to prevent default, but events that extends PCEvent might do more things.
+     */
+    proto.cancel = function() {
+        this.default_prevented = true;
     }
 
     /**
@@ -65,7 +72,7 @@ window.PCEvent = PacaClass('PCEvent');  (function() {
      * @return Boolean
      */
     proto.isPropagationStopped = function() {
-        return this.propagation_stopped;
+        return this.default_prevented;
     }
 
 })();
@@ -157,7 +164,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
                 var func = handler_data[0];
                 var scope = handler_data[1];
                 func.call(scope, event);
-                if (event.propagation_stopped) {
+                if (event.default_prevented) {
                     return;
                 }
             }

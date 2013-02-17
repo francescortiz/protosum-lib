@@ -20,7 +20,7 @@ USAGE:
 
  PCEvent methos:
 
-    - stopPropagation()
+    - preventDefault()
 
         * stops event queue execution after this handlerFunction finishes.
 
