@@ -45,6 +45,12 @@ window.PCEvent = PacaClass('PCEvent');  (function() {
     proto.dispatcher;
 
     /**
+     * It contains the number of times the event has been used when your event handler receives it.
+     * @type {Number}
+     */
+    proto.use_count = 0;
+
+    /**
      * Creates an event
      * @param name  String  name of the event to create.
      * @constructor
@@ -164,6 +170,7 @@ window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
                 var func = handler_data[0];
                 var scope = handler_data[1];
                 func.call(scope, event);
+                event.use_count += 1;
                 if (event.default_prevented) {
                     return;
                 }

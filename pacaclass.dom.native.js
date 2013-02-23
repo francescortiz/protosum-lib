@@ -306,6 +306,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
                 var func = handler_data[0];
                 var scope = handler_data[1];
                 func.call(scope, event);
+                event.use_count += 1;
                 if (event.default_prevented) {
                     return;
                 }
