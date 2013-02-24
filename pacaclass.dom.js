@@ -23,7 +23,8 @@
  *
  * @class
  */
-window.DisplayEvent = PacaClass('DisplayEvent', PCEvent); (function(){
+window.DisplayEvent = PacaClass('DisplayEvent', PCEvent);
+(function () {
     var proto = DisplayEvent.prototype;
 
     DisplayEvent.ADDED_TO_CONTAINER = "ADDED_TO_CONTAINER";
@@ -35,8 +36,8 @@ window.DisplayEvent = PacaClass('DisplayEvent', PCEvent); (function(){
      * @param name
      * @param container {Object}
      */
-    proto.constructor = function(name, container) {
-        this.getSuper(Event).constructor.call(this, name);
+    proto.constructor = function (name, container) {
+        this.getSuper(PCEvent).constructor.call(this, name);
         this.container = container;
     }
 

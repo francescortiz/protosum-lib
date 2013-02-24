@@ -21,13 +21,12 @@
 //PacaClass.include("pacaclass.dom");
 
 
-
-
 /**
  * A class that represents a DOM object that can be added to another DOM object. The container must be a NativeDisplayObjectContainer
  * @type NativeDisplayObject
  */
-window.NativeDisplayObject = PacaClass('NativeDisplayObject', PCEventDispatcher); (function () {
+window.NativeDisplayObject = PacaClass('NativeDisplayObject', PCEventDispatcher);
+(function () {
     var proto = NativeDisplayObject.prototype;
 
     /**
@@ -35,15 +34,16 @@ window.NativeDisplayObject = PacaClass('NativeDisplayObject', PCEventDispatcher)
      */
     proto.node;
 
-    proto.constructor = function(node){
+    proto.constructor = function (node) {
         if (!node) {
             throw new Error("NativeDisplayObject.constructor: a dom object must be given as node argument")
         }
         this.getSuper(PCEventDispatcher).constructor.call(this);
         this.node = node;
+        this.style = node.style;
     }
 
-    proto.getNode = function() {
+    proto.getNode = function () {
         return this.node;
     }
 
@@ -54,7 +54,8 @@ window.NativeDisplayObject = PacaClass('NativeDisplayObject', PCEventDispatcher)
  * A class that represents DOM object that can contain DOM objects. These DOM objects must be mapped into DisplayObjects
  * @type NativeDisplayObjectContainer
  */
-window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer'); (function() {
+window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer');
+(function () {
     var proto = NativeDisplayObjectContainer.prototype;
 
     /**
@@ -70,12 +71,13 @@ window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer');
      */
     proto.contentNode;
 
-    proto.constructor = function(node, contentNode){
+    proto.constructor = function (node, contentNode) {
         this.children = [];
         if (!node) {
             throw new Error("NativeDisplayObjectContainer.constructor: a dom object must be given as node argument")
         }
         this.node = node;
+        this.style = this.node.style;
         if (contentNode) {
             this.contentNode = contentNode;
         } else {
@@ -83,7 +85,7 @@ window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer');
         }
     }
 
-    proto.addChild = function(child, effect) {
+    proto.addChild = function (child, effect) {
 
         if (!child.isInstance(NativeDisplayObject)) {
             throw new Error("NativeDisplayObjectContainer.appendChild: child must be a NativeDisplayObject instance.");
@@ -97,7 +99,7 @@ window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer');
 
     };
 
-    proto.clear = function() {
+    proto.clear = function () {
         var contentNode = this.contentNode;
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
@@ -113,7 +115,8 @@ window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer');
  * A class that represents a DOM object that can be added into another DOM object and that can contain DOM objects (NativeDisplayObject + NativeDisplayObjectContainer).
  * @type NativeDomObject
  */
-window.NativeDomObject = PacaClass('NativeDomObject', NativeDisplayObject, NativeDisplayObjectContainer); (function () {
+window.NativeDomObject = PacaClass('NativeDomObject', NativeDisplayObject, NativeDisplayObjectContainer);
+(function () {
     var proto = NativeDomObject.prototype;
 
     proto.constructor = function (node, content_node) {
@@ -124,7 +127,8 @@ window.NativeDomObject = PacaClass('NativeDomObject', NativeDisplayObject, Nativ
 })();
 
 
-window.NativePCEvent = PacaClass('NativePCEvent', PCEvent); (function(){
+window.NativePCEvent = PacaClass('NativePCEvent', PCEvent);
+(function () {
     var proto = NativePCEvent.prototype;
 
     /**
@@ -142,14 +146,14 @@ window.NativePCEvent = PacaClass('NativePCEvent', PCEvent); (function(){
     /**
      * If called, parent dom objects won't receive the click event
      */
-    proto.stopPropagation = function() {
+    proto.stopPropagation = function () {
         this.propagation_stopped = true;
     }
 
     /**
      * equivalent to call both preventDefault and stopPropagation.
      */
-    proto.cancel = function() {
+    proto.cancel = function () {
         this.default_prevented = true;
         this.propagation_stopped = true;
     }
@@ -158,7 +162,7 @@ window.NativePCEvent = PacaClass('NativePCEvent', PCEvent); (function(){
      *
      * @param native_event {Event}
      */
-    proto.constructor = function(native_event) {
+    proto.constructor = function (native_event) {
         this.getSuper(PCEvent).constructor.call(this, native_event.type);
         this.native_event = native_event;
     }
@@ -174,21 +178,22 @@ window.NativePCEvent = PacaClass('NativePCEvent', PCEvent); (function(){
  * @extends NativePCEventDispatcher
  * @type NativePCEventDispatcher
  */
-window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisplayObject, PCEventDispatcher); (function(){
+window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisplayObject, PCEventDispatcher);
+(function () {
     var proto = NativePCEventDispatcher.prototype;
 
     var NATIVE_EVENTS = [
         // Base events
-        "click","dblclick","mousedown","mousemove","mouseover","mouseup","mouseout","keydown","keypress","keyup",
-        "abort","error","load","resize","scroll","unload","blur","change","focus","reset","select","submit","pagehide",
+        "click", "dblclick", "mousedown", "mousemove", "mouseover", "mouseup", "mouseout", "keydown", "keypress", "keyup",
+        "abort", "error", "load", "resize", "scroll", "unload", "blur", "change", "focus", "reset", "select", "submit", "pagehide",
         "pageshow",
         // Clipboard events
-        "copy","cut","paste","selection",
+        "copy", "cut", "paste", "selection",
         // Drag events
-        "drag","drop",
+        "drag", "drop",
         // Mobile events
-        "touchstart","touchcancel","touchend","touchleave","touchmove","orientationchange",
-        "gesturestart","gesturechange","gestureend"
+        "touchstart", "touchcancel", "touchend", "touchleave", "touchmove", "orientationchange",
+        "gesturestart", "gesturechange", "gestureend"
     ];
     var NATIVE_EVENTS_LENGTH = NATIVE_EVENTS.length;
 
@@ -196,7 +201,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
      *
      * @param node {HTMLElement}
      */
-    proto.constructor = function(node) {
+    proto.constructor = function (node) {
         this.getSuper(NativeDisplayObject).constructor.call(this, node);
         this.__native_listener__ = delegate(this.native_listener, this);
     }
@@ -205,7 +210,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
      *
      * @param native_event Event
      */
-    proto.native_listener = function(native_event) {
+    proto.native_listener = function (native_event) {
         if (!native_event) {
             native_event = window.event;
         }
@@ -220,9 +225,9 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
         }
     }
 
-    var isNative = function(name) {
+    var isNative = function (name) {
         var i = 0;
-        for (;i < NATIVE_EVENTS_LENGTH; i++) {
+        for (; i < NATIVE_EVENTS_LENGTH; i++) {
             if (NATIVE_EVENTS[i] === name) {
                 return true;
             }
@@ -238,7 +243,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
      * @param [low_priority]  Boolean   if true, the event will be pushed to the end of the event queue
      * @param [use_capture]   Boolean   if true and the event is a native event, the event will registered using useCapture. Does nothing on IE8 and lower.
      */
-    proto.addEventListener = function(name, handler, scope, low_priority, use_capture) {
+    proto.addEventListener = function (name, handler, scope, low_priority, use_capture) {
         if (!handler) {
             throw new Error("PCEventDispatcher.addEventListener: Undefined handler provided for " + name + " on " + scope.__class__.__name__);
         }
@@ -252,7 +257,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
             if (node.addEventListener) { // W3C DOM
                 node.addEventListener(name, this.__native_listener__, use_capture);
             } else if (node.attachEvent) { // IE <= 8
-                node.attachEvent("on"+name, this.__native_listener__);
+                node.attachEvent("on" + name, this.__native_listener__);
             }
         }
         var handler_list = this.registered_events[name];
@@ -280,7 +285,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
         if (!scope.__original_destroy__) {
             scope.__event_dispatchers__.push(this);
             scope.__original_destroy__ = scope.destroy;
-            scope.destroy = function() {
+            scope.destroy = function () {
                 this.__original_destroy__.apply(this, arguments);
                 var len = this.__event_dispatchers__.length;
                 for (var i = 0; i < len; i++) {
@@ -294,7 +299,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
      * Triggers an event
      * @param event  PCEvent  event to dispatch
      */
-    proto.dispatchEvent = function(event) {
+    proto.dispatchEvent = function (event) {
         if (!event || !event.isInstance || !event.isInstance(PCEvent)) {
             throw new Error("PCEventDispatcher.trigger: event is not PCEvent instance. PCEvent = " + event);
         }
@@ -321,7 +326,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
      * @param [scope]    Object    object to remove event from. If omited all objects are removed.
      * @param [use_capture] Boolean If we set use_capture to true when we registered the event, we must set it to true when unregistering the event.
      */
-    proto.removeEventListener = function(name, handler, scope, use_capture) {
+    proto.removeEventListener = function (name, handler, scope, use_capture) {
         if (!handler && !scope) {
             this.registered_events[name] = {};
         }
@@ -359,7 +364,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
 //                TODO: Right now use_capture events are not distinguished from the ones that don't use use_capture by NativeEventListener. We should extend the addEventListener function so that it doesn't mix them.
                 node.removeEventListener(name, this.__native_listener__, use_capture);
             } else if (node.detachEvent) { // IE <= 8
-                node.detachEvent("on"+name, this.__native_listener__);
+                node.detachEvent("on" + name, this.__native_listener__);
             }
         }
 
@@ -371,7 +376,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
      * @param [handler]  Function  if specified, remove only events associated with this handler function
      * @param [use_capture] Boolean  Whether we want to clear native events created with useCapture
      */
-    proto.clearEventListeners = function(scope, handler, use_capture) {
+    proto.clearEventListeners = function (scope, handler, use_capture) {
         if (!scope && !handler) {
             this.registered_events = {};
         } else {
@@ -402,7 +407,7 @@ window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisp
 //                      TODO: Right now use_capture events are not distinguished from the ones that don't use use_capture by NativeEventListener. We should extend the addEventListener function so that it doesn't mix them.
                         node.removeEventListener(name, this.__native_listener__, use_capture);
                     } else if (node.detachEvent) { // IE <= 8
-                        node.detachEvent("on"+name, this.__native_listener__);
+                        node.detachEvent("on" + name, this.__native_listener__);
                     }
                 }
             }
