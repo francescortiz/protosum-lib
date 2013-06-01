@@ -18,14 +18,14 @@
  ****************/
 
 
-//PacaClass.include("pacaclass.dom");
+//ProtoSum.include("protosum.dom");
 
 
 /**
  * A class that represents a DOM object that can be added to another DOM object. The container must be a NativeDisplayObjectContainer
  * @type NativeDisplayObject
  */
-window.NativeDisplayObject = PacaClass('NativeDisplayObject', PCEventDispatcher);
+window.NativeDisplayObject = ProtoSum('NativeDisplayObject', PCEventDispatcher);
 (function () {
     var proto = NativeDisplayObject.prototype;
 
@@ -54,7 +54,7 @@ window.NativeDisplayObject = PacaClass('NativeDisplayObject', PCEventDispatcher)
  * A class that represents DOM object that can contain DOM objects. These DOM objects must be mapped into DisplayObjects
  * @type NativeDisplayObjectContainer
  */
-window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer');
+window.NativeDisplayObjectContainer = ProtoSum('NativeDisplayObjectContainer');
 (function () {
     var proto = NativeDisplayObjectContainer.prototype;
 
@@ -115,7 +115,7 @@ window.NativeDisplayObjectContainer = PacaClass('NativeDisplayObjectContainer');
  * A class that represents a DOM object that can be added into another DOM object and that can contain DOM objects (NativeDisplayObject + NativeDisplayObjectContainer).
  * @type NativeDomObject
  */
-window.NativeDomObject = PacaClass('NativeDomObject', NativeDisplayObject, NativeDisplayObjectContainer);
+window.NativeDomObject = ProtoSum('NativeDomObject', NativeDisplayObject, NativeDisplayObjectContainer);
 (function () {
     var proto = NativeDomObject.prototype;
 
@@ -127,7 +127,7 @@ window.NativeDomObject = PacaClass('NativeDomObject', NativeDisplayObject, Nativ
 })();
 
 
-window.NativePCEvent = PacaClass('NativePCEvent', PCEvent);
+window.NativePCEvent = ProtoSum('NativePCEvent', PCEvent);
 (function () {
     var proto = NativePCEvent.prototype;
 
@@ -178,7 +178,7 @@ window.NativePCEvent = PacaClass('NativePCEvent', PCEvent);
  * @extends NativePCEventDispatcher
  * @type NativePCEventDispatcher
  */
-window.NativePCEventDispatcher = PacaClass('NativePCEventDispatcher', NativeDisplayObject, PCEventDispatcher);
+window.NativePCEventDispatcher = ProtoSum('NativePCEventDispatcher', NativeDisplayObject, PCEventDispatcher);
 (function () {
     var proto = NativePCEventDispatcher.prototype;
 

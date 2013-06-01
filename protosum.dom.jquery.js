@@ -17,13 +17,13 @@
  under the License.
  ****************/
 
-//PacaClass.include("pacaclass.dom");
+//ProtoSum.include("protosum.dom");
 
 /**
  * A class that represents a DOM object that can be added to another DOM object. The container must be a DisplayObject
  * @type DisplayObject
  */
-window.DisplayObject = PacaClass('DisplayObject', PCEventDispatcher); (function () {
+window.DisplayObject = ProtoSum('DisplayObject', PCEventDispatcher); (function () {
     var proto = DisplayObject.prototype;
 
     proto.node;
@@ -48,7 +48,7 @@ window.DisplayObject = PacaClass('DisplayObject', PCEventDispatcher); (function 
  * A class that represents DOM object that can contain DOM objects. These DOM objects must be mapped into DisplayObjects
  * @type DisplayObjectContainer
  */
-window.DisplayObjectContainer = PacaClass('DisplayObjectContainer'); (function() {
+window.DisplayObjectContainer = ProtoSum('DisplayObjectContainer'); (function() {
     var proto = DisplayObjectContainer.prototype;
 
     proto.children;
@@ -101,7 +101,7 @@ window.DisplayObjectContainer = PacaClass('DisplayObjectContainer'); (function()
  * A class that represents a DOM object that can be added into another DOM object and that can contain DOM objects (DisplayObject + DisplayObjectContainer).
  * @type DomObject
  */
-window.DomObject = PacaClass('DomObject', DisplayObject, DisplayObjectContainer); (function () {
+window.DomObject = ProtoSum('DomObject', DisplayObject, DisplayObjectContainer); (function () {
     var proto = DomObject.prototype;
 
     proto.constructor = function (node, content_node) {

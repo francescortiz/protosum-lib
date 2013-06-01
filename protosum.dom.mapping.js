@@ -21,7 +21,7 @@
  * Utilities to map classes to dom objects
  * @type {*}
  */
-window.DomMapping = PacaClass('DomMapping'); (function(){
+window.DomMapping = ProtoSum('DomMapping'); (function(){
     var proto = DomMapping.prototype;
 
     /**
@@ -32,7 +32,7 @@ window.DomMapping = PacaClass('DomMapping'); (function(){
      * @private
      */
     DomMapping.__map = function(domobject, class_name, args) {
-        if (!domobject.pacaclass_instance) {
+        if (!domobject.protosum_instance) {
             var instance;
             var eval_code = "instance = new " + class_name + "(domobject";
             for (var j = 0; j < args.length; j++) {
@@ -40,14 +40,14 @@ window.DomMapping = PacaClass('DomMapping'); (function(){
             }
             eval_code += ");";
             eval(eval_code);
-            domobject.pacaclass_instance = instance;
+            domobject.protosum_instance = instance;
         }
         return instance;
     }
 
 
     /**
-     * Mapped dom objects get a pacaclass_instance attribute that points to the PacaClass class. Extra arguments are passed to the constructor.
+     * Mapped dom objects get a protosum_instance attribute that points to the ProtoSum class. Extra arguments are passed to the constructor.
      * The class must accept the dom object as first argument.
      * @param selector
      * @param class_name
@@ -80,13 +80,13 @@ window.DomMapping = PacaClass('DomMapping'); (function(){
         var list = [];
         for (var i = 0; i < matches_length; i++) {
             var domobject = matches[i];
-            var instance = domobject.pacaclass_instance;
+            var instance = domobject.protosum_instance;
             if (instance) {
                 if (class_name && instance.__class__.__name__ != class_name) {
                     continue;
                 }
                 instance.destroy();
-                delete domobject.pacaclass_instance;
+                delete domobject.protosum_instance;
             }
             list.push(domobject);
         }
@@ -94,22 +94,22 @@ window.DomMapping = PacaClass('DomMapping'); (function(){
     }
 
     /**
-     * Maps dom objects that have a pacaclass attribute set.
+     * Maps dom objects that have a protosum attribute set.
      * @param [selector]  Object  jQuery selector to search inside. If omited uses the whole HTML.
      */
     DomMapping.automap = function(selector) {
         var matches;
         if (selector) {
-            matches = $(selector).find('[pacaclass]');
+            matches = $(selector).find('[protosum]');
         } else {
-            matches = $('[pacaclass]');
+            matches = $('[protosum]');
         }
         var matches_length = matches.length;
         var list = [];
         var args = [].splice.call(arguments,0, 2);
         for (var i = 0; i < matches_length; i++) {
             var domobject = matches[i];
-            var class_name = domobject.getAttribute('pacaclass');
+            var class_name = domobject.getAttribute('protosum');
             var instance;
             if (class_name) {
                 instance = DomMapping.__map(domobject, class_name, args);

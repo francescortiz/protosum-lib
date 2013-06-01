@@ -1,4 +1,4 @@
-window.FrameEvent = PacaClass('FrameEvent', PCEvent);
+window.FrameEvent = ProtoSum('FrameEvent', PCEvent);
 (function () {
     var proto = FrameEvent.prototype;
 
@@ -12,7 +12,7 @@ window.FrameEvent = PacaClass('FrameEvent', PCEvent);
 
 })();
 
-window.Scene = PacaClass('Scene', NativeDomObject, PCEventDispatcher);
+window.Scene = ProtoSum('Scene', NativeDomObject, PCEventDispatcher);
 (function () {
     var proto = Scene.prototype;
 
@@ -49,7 +49,7 @@ window.Scene = PacaClass('Scene', NativeDomObject, PCEventDispatcher);
 
 })();
 
-window.PCEntity = PacaClass('PCEntity', NativeDisplayObject, PCEventDispatcher);
+window.PCEntity = ProtoSum('PCEntity', NativeDisplayObject, PCEventDispatcher);
 (function () {
     var proto = PCEntity.prototype;
 
@@ -94,7 +94,7 @@ window.PCEntity = PacaClass('PCEntity', NativeDisplayObject, PCEventDispatcher);
 
 })();
 
-window.AliveEntity = PacaClass('AliveEntity', PCEntity);
+window.AliveEntity = ProtoSum('AliveEntity', PCEntity);
 (function () {
     var proto = AliveEntity.prototype;
 
@@ -111,7 +111,7 @@ window.AliveEntity = PacaClass('AliveEntity', PCEntity);
 })();
 
 
-window.Renderizable = PacaClass('Renderizable', NativeDisplayObject, PCEventDispatcher);
+window.Renderizable = ProtoSum('Renderizable', NativeDisplayObject, PCEventDispatcher);
 (function () {
     var proto = Renderizable.prototype;
 
@@ -126,7 +126,7 @@ window.Renderizable = PacaClass('Renderizable', NativeDisplayObject, PCEventDisp
 
 })();
 
-window.RImage = PacaClass('RImage', Renderizable);
+window.RImage = ProtoSum('RImage', Renderizable);
 (function () {
     var proto = RImage.prototype;
 
@@ -165,7 +165,7 @@ window.RImage = PacaClass('RImage', Renderizable);
 })();
 
 
-window.RImageSequence = PacaClass('RImageSequence', Renderizable);
+window.RImageSequence = ProtoSum('RImageSequence', Renderizable);
 (function () {
     var proto = RImageSequence.prototype;
 

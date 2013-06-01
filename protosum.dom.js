@@ -17,13 +17,13 @@
  under the License.
  ****************/
 
-//PacaClass.include("pacaclass.event");
+//ProtoSum.include("protosum.event");
 
 /**
  *
  * @class
  */
-window.DisplayEvent = PacaClass('DisplayEvent', PCEvent);
+window.DisplayEvent = ProtoSum('DisplayEvent', PCEvent);
 (function () {
     var proto = DisplayEvent.prototype;
 

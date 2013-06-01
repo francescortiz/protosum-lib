@@ -18,10 +18,10 @@
  ****************/
 
 /**
- * PacaClass base event Event
+ * ProtoSum base event Event
  * @type PCEvent
  */
-window.PCEvent = PacaClass('PCEvent');  (function() {
+window.PCEvent = ProtoSum('PCEvent');  (function() {
     /**
      * PCEvent prototype
      * @type Object
@@ -88,7 +88,7 @@ window.PCEvent = PacaClass('PCEvent');  (function() {
  * EventDispatcher
  * @type PCEventDispatcher
  */
-window.PCEventDispatcher = PacaClass('PCEventDispatcher');  (function() {
+window.PCEventDispatcher = ProtoSum('PCEventDispatcher');  (function() {
     var proto = PCEventDispatcher.prototype;
 
     /**

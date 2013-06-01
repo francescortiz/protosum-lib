@@ -1,9 +1,9 @@
-pacaclass-lib
+protosum-lib
 =============
 
-Basic libraries that take advantage of pacaclass.
+Basic libraries that take advantage of protosum.
 
-pacaclass.event
+protosum.event
 ____________________
 ABOUT:
   AS3 like event handling.
@@ -12,7 +12,7 @@ USAGE:
 
   - see jsdoc for updated documentation
   - new PCEventDispatcher(); // Creates and event dispatcher instance
-  - window.CustomEvent = PacaClass('CustomEvent', PCEvent); // Extends class PCEvent to create a custom event.
+  - window.CustomEvent = ProtoSum('CustomEvent', PCEvent); // Extends class PCEvent to create a custom event.
 
  PCEventDispatcher methods:
 
@@ -29,7 +29,7 @@ USAGE:
 
 EXAMPLE:
 
-    var CustomEvent = PacaClass('CustomEvent', PCEvent); (function() {
+    var CustomEvent = ProtoSum('CustomEvent', PCEvent); (function() {
         var proto = CustomEvent.prototype;
 
         proto.name = "customevent";
@@ -40,7 +40,7 @@ EXAMPLE:
 
     })();
 
-    var C = PacaClass(A, B); (function() {
+    var C = ProtoSum(A, B); (function() {
         var proto = C.prototype;
 
         proto.someVar = "somveValue";
