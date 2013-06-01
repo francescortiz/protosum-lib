@@ -28,11 +28,11 @@ window.DisplayObject = ProtoSum('DisplayObject', PCEventDispatcher); (function (
 
     proto.node;
 
-    proto.constructor = function(node){
+    proto.__init__ = function(node){
         if (!node) {
-            throw new Error("DisplayObject.constructor: a dom object must be given as node argument")
+            throw new Error("DisplayObject.__init__: a dom object must be given as node argument")
         }
-        this.getSuper(PCEventDispatcher).constructor.call(this);
+        this.getSuper(PCEventDispatcher).__init__.call(this);
         this.node = $(node);
     }
 
@@ -55,9 +55,9 @@ window.DisplayObjectContainer = ProtoSum('DisplayObjectContainer'); (function() 
     proto.node;
     proto.contentNode;
 
-    proto.constructor = function(node, contentNode){
+    proto.__init__ = function(node, contentNode){
         if (!node) {
-            throw new Error("DisplayObjectContainer.constructor: a dom object must be given as node argument")
+            throw new Error("DisplayObjectContainer.__init__: a dom object must be given as node argument")
         }
         this.children = [];
         this.node = $(node);
@@ -104,11 +104,11 @@ window.DisplayObjectContainer = ProtoSum('DisplayObjectContainer'); (function() 
 window.DomObject = ProtoSum('DomObject', DisplayObject, DisplayObjectContainer); (function () {
     var proto = DomObject.prototype;
 
-    proto.constructor = function (node, content_node) {
+    proto.__init__ = function (node, content_node) {
         if (!node) {
-            throw new Error("DomObject.constructor: a dom object must be given as node argument")
+            throw new Error("DomObject.__init__: a dom object must be given as node argument")
         }
-        this.getSuper(PCEventDispatcher).constructor.call(this);
+        this.getSuper(PCEventDispatcher).__init__.call(this);
         this.node = $(node);
         if (contentNode) {
             this.contentNode = $(contentNode);

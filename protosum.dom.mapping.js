@@ -21,8 +21,17 @@
  * Utilities to map classes to dom objects
  * @type {*}
  */
+
 window.DomMapping = ProtoSum('DomMapping'); (function(){
     var proto = DomMapping.prototype;
+
+    var get_domobjects = function(container, selector) {
+        if (typeof selector == "string") {
+            return container.querySelectorAll(selector);
+        } else {
+            return selector;
+        }
+    };
 
     /**
      *
@@ -47,14 +56,14 @@ window.DomMapping = ProtoSum('DomMapping'); (function(){
 
 
     /**
-     * Mapped dom objects get a protosum_instance attribute that points to the ProtoSum class. Extra arguments are passed to the constructor.
+     * Mapped dom objects get a protosum_instance attribute that points to the ProtoSum class. Extra arguments are passed to the __init__.
      * The class must accept the dom object as first argument.
      * @param selector
      * @param class_name
      * @return {Array}  List of class instances created.
      */
     DomMapping.map = function(selector, class_name) {
-        var matches = $(selector);
+        var matches = document.querySelectorAll(selector);
         var matches_length = matches.length;
         var list = [];
         var args = [].splice.call(arguments,0, 2);
@@ -75,7 +84,7 @@ window.DomMapping = ProtoSum('DomMapping'); (function(){
      * @return {Array}      List of dom objects that have been unmapped
      */
     DomMapping.unmap = function(selector, class_name) {
-        var matches = $(selector);
+        var matches = get_domobjects(document, selector);
         var matches_length = matches.length;
         var list = [];
         for (var i = 0; i < matches_length; i++) {
@@ -98,16 +107,22 @@ window.DomMapping = ProtoSum('DomMapping'); (function(){
      * @param [selector]  Object  jQuery selector to search inside. If omited uses the whole HTML.
      */
     DomMapping.automap = function(selector) {
-        var matches;
+        var i,
+            matches,
+            containers;
         if (selector) {
-            matches = $(selector).find('[protosum]');
+            matches = [];
+            containers = get_domobjects(document, selector);
+            for (i = 0; i < containers.length; i++) {
+                matches.concat(get_domobjects(containers[i], '[protosum]'));
+            }
         } else {
-            matches = $('[protosum]');
+            matches = get_domobjects(document, '[protosum]');
         }
         var matches_length = matches.length;
         var list = [];
         var args = [].splice.call(arguments,0, 2);
-        for (var i = 0; i < matches_length; i++) {
+        for (i = 0; i < matches_length; i++) {
             var domobject = matches[i];
             var class_name = domobject.getAttribute('protosum');
             var instance;

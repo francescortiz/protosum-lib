@@ -34,7 +34,7 @@ EXAMPLE:
 
         proto.name = "customevent";
 
-        proto.constructor = function(data) {
+        proto.__init__ = function(data) {
             this.data = data;
         }
 

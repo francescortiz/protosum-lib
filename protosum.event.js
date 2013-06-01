@@ -53,9 +53,9 @@ window.PCEvent = ProtoSum('PCEvent');  (function() {
     /**
      * Creates an event
      * @param name  String  name of the event to create.
-     * @constructor
+     * @__init__
      */
-    proto.constructor = function(name) {
+    proto.__init__ = function(name) {
         this.name = name;
     }
 
@@ -100,7 +100,7 @@ window.PCEventDispatcher = ProtoSum('PCEventDispatcher');  (function() {
     /**
      * @constructs PCEventDispatcher
      */
-    proto.constructor = function() {
+    proto.__init__ = function() {
         this.registered_events = {};
     }
 

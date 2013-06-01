@@ -34,11 +34,11 @@ window.NativeDisplayObject = ProtoSum('NativeDisplayObject', PCEventDispatcher);
      */
     proto.node;
 
-    proto.constructor = function (node) {
+    proto.__init__ = function (node) {
         if (!node) {
-            throw new Error("NativeDisplayObject.constructor: a dom object must be given as node argument")
+            throw new Error("NativeDisplayObject.__init__: a dom object must be given as node argument")
         }
-        this.getSuper(PCEventDispatcher).constructor.call(this);
+        this.getSuper(PCEventDispatcher).__init__.call(this);
         this.node = node;
         this.style = node.style;
     }
@@ -71,10 +71,10 @@ window.NativeDisplayObjectContainer = ProtoSum('NativeDisplayObjectContainer');
      */
     proto.contentNode;
 
-    proto.constructor = function (node, contentNode) {
+    proto.__init__ = function (node, contentNode) {
         this.children = [];
         if (!node) {
-            throw new Error("NativeDisplayObjectContainer.constructor: a dom object must be given as node argument")
+            throw new Error("NativeDisplayObjectContainer.__init__: a dom object must be given as node argument")
         }
         this.node = node;
         this.style = this.node.style;
@@ -119,9 +119,9 @@ window.NativeDomObject = ProtoSum('NativeDomObject', NativeDisplayObject, Native
 (function () {
     var proto = NativeDomObject.prototype;
 
-    proto.constructor = function (node, content_node) {
-        this.getSuper(NativeDisplayObject).constructor.call(this, node);
-        this.getSuper(NativeDisplayObjectContainer).constructor.call(this, node, content_node);
+    proto.__init__ = function (node, content_node) {
+        this.getSuper(NativeDisplayObject).__init__.call(this, node);
+        this.getSuper(NativeDisplayObjectContainer).__init__.call(this, node, content_node);
     }
 
 })();
@@ -162,8 +162,8 @@ window.NativePCEvent = ProtoSum('NativePCEvent', PCEvent);
      *
      * @param native_event {Event}
      */
-    proto.constructor = function (native_event) {
-        this.getSuper(PCEvent).constructor.call(this, native_event.type);
+    proto.__init__ = function (native_event) {
+        this.getSuper(PCEvent).__init__.call(this, native_event.type);
         this.native_event = native_event;
     }
 
@@ -201,9 +201,9 @@ window.NativePCEventDispatcher = ProtoSum('NativePCEventDispatcher', NativeDispl
      *
      * @param node {HTMLElement}
      */
-    proto.constructor = function (node) {
-        this.getSuper(NativeDisplayObject).constructor.call(this, node);
-        this.__native_listener__ = delegate(this.native_listener, this);
+    proto.__init__ = function (node) {
+        this.getSuper(NativeDisplayObject).__init__.call(this, node);
+        this.__native_listener__ = this.native_listener.bind(this);
     }
 
     /**

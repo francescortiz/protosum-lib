@@ -4,7 +4,7 @@ window.FrameEvent = ProtoSum('FrameEvent', PCEvent);
 
     FrameEvent.FRAME_EVENT = "FRAME_EVENT";
 
-    proto.constructor = function (current_time, time_offset) {
+    proto.__init__ = function (current_time, time_offset) {
         this.name = FrameEvent.FRAME_EVENT;
         this.current_time = current_time;
         this.time_offset = time_offset;
@@ -18,9 +18,9 @@ window.Scene = ProtoSum('Scene', NativeDomObject, PCEventDispatcher);
 
     proto.last_time = 0;
 
-    proto.constructor = function (node, content_node) {
-        this.getSuper(NativeDomObject).constructor.call(this, node, content_node);
-    }
+//    proto.__init__ = function (node, content_node) {
+//        this.getSuper(NativeDomObject).__init__.call(this, node, content_node);
+//    }
 
     proto.setFps = function (fps) {
         this.frame_duration = Math.floor(1000 / fps);
@@ -36,7 +36,7 @@ window.Scene = ProtoSum('Scene', NativeDomObject, PCEventDispatcher);
         var time_offset = current_time - this.last_time;
         this.last_time = current_time;
         this.dispatchEvent(new FrameEvent(current_time, time_offset));
-        this.timeoutId = setTimeout(delegate(this.frame_dispatcher, this), this.frame_duration);
+        this.timeoutId = setTimeout(this.frame_dispatcher.bind(this), this.frame_duration);
     }
 
     proto.pause = function () {
@@ -66,8 +66,8 @@ window.PCEntity = ProtoSum('PCEntity', NativeDisplayObject, PCEventDispatcher);
      *
      * @param renderizable Renderizable
      */
-    proto.constructor = function (renderizable) {
-        this.getSuper(NativeDisplayObject).constructor.call(this, renderizable.node);
+    proto.__init__ = function (renderizable) {
+        this.getSuper(NativeDisplayObject).__init__.call(this, renderizable.node);
         this.renderizable = renderizable;
     }
 
@@ -115,9 +115,9 @@ window.Renderizable = ProtoSum('Renderizable', NativeDisplayObject, PCEventDispa
 (function () {
     var proto = Renderizable.prototype;
 
-    proto.constructor = function (node) {
-        this.getSuper(PCEventDispatcher).constructor.call(this);
-        this.getSuper(NativeDisplayObject).constructor.call(this, node);
+    proto.__init__ = function (node) {
+        this.getSuper(PCEventDispatcher).__init__.call(this);
+        this.getSuper(NativeDisplayObject).__init__.call(this, node);
     }
 
     proto.render = function (entity) {
@@ -130,11 +130,11 @@ window.RImage = ProtoSum('RImage', Renderizable);
 (function () {
     var proto = RImage.prototype;
 
-    proto.constructor = function (src) {
+    proto.__init__ = function (src) {
         var img = document.createElement("img");
         img.src = src;
         img.setAttribute("class", "renderizable");
-        this.getSuper(Renderizable).constructor.call(this, img);
+        this.getSuper(Renderizable).__init__.call(this, img);
     }
 
     proto.render = function (entity) {
@@ -174,12 +174,12 @@ window.RImageSequence = ProtoSum('RImageSequence', Renderizable);
     proto.current_frame = 0;
     proto.num_frames = undefined;
 
-    proto.constructor = function (frame_list) {
+    proto.__init__ = function (frame_list) {
         var img = document.createElement("img");
         img.src = frame_list[0];
         img.setAttribute("class", "renderizable");
         this.frame_list = frame_list;
-        this.getSuper(Renderizable).constructor.call(this, img);
+        this.getSuper(Renderizable).__init__.call(this, img);
         this.num_frames = frame_list.length;
         for (var i = 0; i < this.num_frames; i++) {
             var img = document.createElement("img");

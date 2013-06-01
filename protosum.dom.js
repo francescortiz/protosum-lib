@@ -36,8 +36,8 @@ window.DisplayEvent = ProtoSum('DisplayEvent', PCEvent);
      * @param name
      * @param container {Object}
      */
-    proto.constructor = function (name, container) {
-        this.getSuper(PCEvent).constructor.call(this, name);
+    proto.__init__ = function (name, container) {
+        this.getSuper(PCEvent).__init__.call(this, name);
         this.container = container;
     }
 
